@@ -134,7 +134,8 @@ class PaymentViewController: UIViewController, SKProductsRequestDelegate, SKPaym
             print("err")
         }
         
-        let request = NSMutableURLRequest(URL: NSURL(string: "https://buy.itunes.apple.com/verifyReceipt")!)
+        //let request = NSMutableURLRequest(URL: NSURL(string: "https://buy.itunes.apple.com/verifyReceipt")!)
+        let request = NSMutableURLRequest(URL: NSURL(string: "https://sandbox.itunes.apple.com/verifyReceipt")!)
         
         let session = NSURLSession.sharedSession()
         request.HTTPMethod = "POST"
