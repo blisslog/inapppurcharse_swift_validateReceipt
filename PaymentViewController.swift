@@ -15,20 +15,36 @@ class PaymentViewController: UIViewController, SKProductsRequestDelegate, SKPaym
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
-        product_id = "iap_id"
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
         SKPaymentQueue.defaultQueue().addTransactionObserver(self)
     }
     
-    func buyConsumable(){
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    // MARK: UIButton
+    @IBAction func closePayment() {
+        self.dismissViewControllerAnimated(true) { () -> Void in
+            
+        }
+    }
+    
+    @IBAction func restorePurchase() {
         if SKPaymentQueue.canMakePayments() {
-            let productID = NSSet(object: self.product_id!)
+            SKPaymentQueue.defaultQueue().restoreCompletedTransactions()
+        }
+        else {
+            print("can't make purchases")
+        }
+    }
+    
+    @IBAction func buyConsumable() {
+        if SKPaymentQueue.canMakePayments() {
+            product_id = "your_consumable_product_id"
+            let productID = NSSet(object: product_id!)
             let productsRequest = SKProductsRequest(productIdentifiers: productID as! Set<String>)
             productsRequest.delegate = self
             productsRequest.start()
@@ -38,9 +54,18 @@ class PaymentViewController: UIViewController, SKProductsRequestDelegate, SKPaym
         }
     }
     
-    @IBAction func buyProduct(product: SKProduct) {
-        let payment = SKPayment(product: product)
-        SKPaymentQueue.defaultQueue().addPayment(payment)
+    @IBAction func buyNonConsumable() {
+        if SKPaymentQueue.canMakePayments() {
+            product_id = "your_none_consumable_product_id"
+            let productID = NSSet(object: product_id!)
+            let productsRequest = SKProductsRequest(productIdentifiers: productID as! Set<String>)
+            productsRequest.delegate = self
+            productsRequest.start()
+        }
+        else {
+            print("can't make purchases")
+        }
+        
     }
     
     func productsRequest (request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
@@ -62,6 +87,14 @@ class PaymentViewController: UIViewController, SKProductsRequestDelegate, SKPaym
         }
     }
     
+    func buyProduct(product: SKProduct) {
+        let payment = SKPayment(product: product)
+        SKPaymentQueue.defaultQueue().addPayment(payment)
+    }
+    
+    func restoreCompletedTransactions() {
+        print("restoreCompletedTransactions")
+    }
     
     func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         for transaction in transactions {
@@ -83,7 +116,7 @@ class PaymentViewController: UIViewController, SKProductsRequestDelegate, SKPaym
     func validateReceipt() {
         //let response: NSURLResponse?
         //let error: NSError?
-
+        
         let receiptUrl = NSBundle.mainBundle().appStoreReceiptURL
         let receipt: NSData = NSData(contentsOfURL:receiptUrl!)!
         
@@ -107,7 +140,7 @@ class PaymentViewController: UIViewController, SKProductsRequestDelegate, SKPaym
         request.HTTPMethod = "POST"
         
         request.HTTPBody = receiptdata.dataUsingEncoding(NSASCIIStringEncoding)
-
+        
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             
             if error != nil {
@@ -133,14 +166,22 @@ class PaymentViewController: UIViewController, SKProductsRequestDelegate, SKPaym
         task.resume()
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func paymentQueue(queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: NSError) {
+        print("paymentQueue:restoreCompletedTransactionsFailedWithError")
     }
-    */
-
+    
+    func paymentQueueRestoreCompletedTransactionsFinished(queue: SKPaymentQueue) {
+        print("paymentQueueRestoreCompletedTransactionsFinished")
+    }
+    
+    /*
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }
