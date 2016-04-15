@@ -172,6 +172,19 @@ class PaymentViewController: UIViewController, SKProductsRequestDelegate, SKPaym
     
     func paymentQueueRestoreCompletedTransactionsFinished(queue: SKPaymentQueue) {
         print("paymentQueueRestoreCompletedTransactionsFinished")
+        
+        if queue.transactions.count == 0 {
+            // none
+        }
+        
+        for transaction in queue.transactions {
+            let product_id = transaction.payment.productIdentifier
+            
+            if product_id == "net.blisslog.memorizingscripture.disciple1" {
+                // ok already buy
+                // after process
+            }
+        }
     }
     
     /*
