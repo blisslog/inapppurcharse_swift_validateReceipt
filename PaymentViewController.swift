@@ -11,13 +11,13 @@ import StoreKit
 
 class PaymentViewController: UIViewController, SKProductsRequestDelegate, SKPaymentTransactionObserver {
     
-    var product_id: String?;
+    var product_id: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        product_id = "iap_id";
+        product_id = "iap_id"
     }
 
     override func didReceiveMemoryWarning() {
@@ -28,14 +28,13 @@ class PaymentViewController: UIViewController, SKProductsRequestDelegate, SKPaym
     
     func buyConsumable(){
         if SKPaymentQueue.canMakePayments() {
-            let productID = NSSet(object: self.product_id!);
-            let productsRequest = SKProductsRequest(productIdentifiers: productID as! Set<String>);
-            productsRequest.delegate = self;
-            productsRequest.start();
-            print("Fething Products");
+            let productID = NSSet(object: self.product_id!)
+            let productsRequest = SKProductsRequest(productIdentifiers: productID as! Set<String>)
+            productsRequest.delegate = self
+            productsRequest.start()
         }
         else {
-            print("can't make purchases");
+            print("can't make purchases")
         }
     }
     
@@ -52,7 +51,7 @@ class PaymentViewController: UIViewController, SKProductsRequestDelegate, SKPaym
                 print(validProduct.localizedTitle)
                 print(validProduct.localizedDescription)
                 print(validProduct.price)
-                buyProduct(validProduct);
+                buyProduct(validProduct)
             }
             else {
                 print(validProduct.productIdentifier)
