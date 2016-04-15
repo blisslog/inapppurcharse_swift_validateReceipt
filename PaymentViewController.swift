@@ -144,6 +144,9 @@ class PaymentViewController: UIViewController, SKProductsRequestDelegate, SKPaym
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             
             if error != nil {
+                print("Receipt Error: \(error?.description)")
+            }
+            else {
                 do {
                     let json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? NSDictionary
                     
@@ -157,9 +160,6 @@ class PaymentViewController: UIViewController, SKProductsRequestDelegate, SKPaym
                 }
                 
                 /* ... Send a response back to the device ... */
-            }
-            else {
-                print("Receipt Error: \(error?.description)")
             }
         })
         
