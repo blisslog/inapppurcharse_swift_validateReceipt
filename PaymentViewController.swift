@@ -180,7 +180,7 @@ class PaymentViewController: UIViewController, SKProductsRequestDelegate, SKPaym
         for transaction in queue.transactions {
             let product_id = transaction.payment.productIdentifier
             
-            if product_id == "net.blisslog.memorizingscripture.disciple1" {
+            if product_id == "your_none_consumable_product_id" {
                 // ok already buy
                 // after process
             }
